@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Stellar by HTML5 UP</title>
+		<title>Noma Melanoma Diagnosis</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -36,114 +36,126 @@
 					<div id="main">
 
 						<!-- Introduction -->
-							<section id="intro" class="main">
-								<div class="spotlight">
-									<div class="content">
-										<header class="major">
-											<h2>What It Is</h2>
-										</header>
-										<p>Melanoma is a serious disease that can be easily removed if treated early on. With early surgical
-										removal, the five year survival rate is 98% (ISIC Archive). However, if this dangerous disease is allowed
-										to metastasize, or spread to other parts of the body, then the mortality rises dramatically.
-										<br><br>
-										The issue is accessibility to high-quality diagnostic devices that are only available at a healthcare
-										provider. As millions of Americans do not have health coverage, and millions more do not visit their
-										doctors frequently enough to screen the disease, there has to be a better way.
-										<br><br>
-										Enter Noma. Our web-based and Android application takes microscopic images uploaded by the user and
-										uses a deep convolutional neural network to determine the possibility of the presence of cancerous tissue 
-										in the image. It then reports this diagnosis to the user. Noma removes the barrier to effective diagnosis
-										and helps people survive, and thrive.</p>
-									</div>
-									<span class="image"><img src="images/sample.png" alt="" /></span>
+						<section id="intro" class="main">
+							<div class="spotlight">
+								<div class="content">
+									<header class="major">
+										<h2>What It Is</h2>
+									</header>
+									<p>Melanoma is a serious disease that can be easily removed if treated early on. With early surgical
+									removal, the five year survival rate is 98% (ISIC Archive). However, if this dangerous disease is allowed
+									to metastasize, or spread to other parts of the body, then the mortality rises dramatically.
+									<br><br>
+									The issue is accessibility to high-quality diagnostic devices that are only available at a healthcare
+									provider. As millions of Americans do not have health coverage, and millions more do not visit their
+									doctors frequently enough to screen the disease, there has to be a better way.
+									<br><br>
+									Enter Noma. Our web-based and Android application takes microscopic images uploaded by the user and
+									uses a deep convolutional neural network to determine the possibility of the presence of cancerous tissue 
+									in the image. It then reports this diagnosis to the user. Noma removes the barrier to effective diagnosis
+									and helps people survive, and thrive.</p>
 								</div>
-							</section>
+								<span class="image"><img src="images/sample.png" alt="" /></span>
+							</div>
+						</section>
 
 						<!-- Get Started -->
-							<section id="cta" class="main special">
-								<header class="major">
-									<h2>Get Started</h2>
-									<p>Simply select your file by dragging it into the zone below.<br />
-									Thanks for using Noma.</p>
-								</header>
+						<section id="cta" class="main special">
+							<header class="major">
+								<h2>Get Started</h2>
+								<p>Simply select your file by dragging it into the zone below.<br />
+								Thanks for using Noma.</p>
+							</header>
 
-								<br>
+							<br>
 
-								<center>
-									<!--<input type="file" id="files" class="button" name="files[]" multiple />
+							<center>
+								<!--<input type="file" id="files" class="button" name="files[]" multiple />
 
-									<br><br>
+								<br><br>
 
-									<output id="list"></output>
+								<output id="list"></output>
 
-									<br><br>-->
+								<br><br>-->
 
-									<div id="drop_zone" class="button">Drop files here</div>
-									<output id="list"></output>
+								<div id="drop_zone" class="button">Drop files here</div>
+								<output id="list"></output>
 
-									<script>
-									  function handleFileSelect(evt) {
-									    evt.stopPropagation();
-									    evt.preventDefault();
+								<script>
+								  function handleFileSelect(evt) {
+								    evt.stopPropagation();
+								    evt.preventDefault();
 
-									    var files = evt.dataTransfer.files; // FileList object.
+								    var files = evt.dataTransfer.files; // FileList object.
 
-									    // files is a FileList of File objects. List some properties.
-									    var output = [];
+								    // files is a FileList of File objects. List some properties.
+								    var output = [];
 
-									    const model = new KerasJS.Model({
-										  	filepath: 'melanoma.h5',
-  											filesystem: true
-										});
+								    const model = new KerasJS.Model({
+									  	filepath: 'melanoma.h5',
+											filesystem: true
+									});
 
-									    f = files[0];
+								    // just the first image
+								    f = files[0];
 
-								        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-								                  f.size, ' bytes, last modified: ',
-								                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-								                  '</li>');
+							        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+							                  f.size, ' bytes, last modified: ',
+							                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+							                  '</li>');
 
-								        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+							        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
 
-							      		// Run network with Keras.JS
-								      	model
-									  	.ready()
-									  	.then(() => {
+						      		// Run network with Keras.JS
+							      	model
+								  	.ready()
+								  	.then(() => {
 
-									  		ctx.drawImage(img, 0, 0);
-											var data = ctx.getImageData(x, y, width, height).data;
+								  		// convert file to image
+								  		document.getElementById('file-input').onchange = function (e) {
+										    loadImage(f,
+										        function (img) {
+										            document.body.appendChild(img);
+										        },
+										        {} // Options
+										    );
+										};
 
-									    	// get input data from file
-									    	const inputData = {
-									      		input_1: new Float32Array(data)
-									    	}
+								  		// convert image to RGB array
+								  		ctx.drawImage(img, 0, 0);
+										var data = ctx.getImageData(x, y, width, height).data;
 
-									    	// make predictions
-									    	return model.predict(inputData)
-									 	})
-									  	.then(outputData => {
-									    	// analyze output
-									  	})
-									  	.catch(err => {
-									    	// handle error
-									  	});
-									  }
+								    	// get input data from file
+								    	const inputData = {
+								      		input_1: new Float32Array(data)
+								    	}
 
-									  function handleDragOver(evt) {
-									    evt.stopPropagation();
-									    evt.preventDefault();
-									    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-									  }
+								    	// make predictions
+								    	return model.predict(inputData)
+								 	})
+								  	.then(outputData => {
+								    	// analyze output
+								  	})
+								  	.catch(err => {
+								    	// handle error
+								  	});
+								  }
 
-									  // Setup the dnd listeners.
-									  var dropZone = document.getElementById('drop_zone');
-									  dropZone.addEventListener('dragover', handleDragOver, false);
-									  dropZone.addEventListener('drop', handleFileSelect, false);
-									</script>
-								</center>
+								  function handleDragOver(evt) {
+								    evt.stopPropagation();
+								    evt.preventDefault();
+								    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+								  }
 
-								<br>
-							</section>
+								  // Setup the dnd listeners.
+								  var dropZone = document.getElementById('drop_zone');
+								  dropZone.addEventListener('dragover', handleDragOver, false);
+								  dropZone.addEventListener('drop', handleFileSelect, false);
+								</script>
+							</center>
+
+							<br>
+						</section>
 
 					</div>
 
@@ -162,6 +174,7 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/loadimage.min.js"></script>
 			<script src="https://unpkg.com/keras-js"></script>
 
 	</body>
